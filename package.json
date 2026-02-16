@@ -1,0 +1,46 @@
+{
+	"name": "iterable-ops",
+	"version": "0.0.0-development",
+	"description": "Lazy utility functions for sync and async iterables — map, filter, take, chunk, zip, flatten",
+	"license": "MIT",
+	"repository": "mstuart/iterable-ops",
+	"funding": "https://github.com/sponsors/mstuart",
+	"author": {
+		"name": "Mark Stuart",
+		"email": "mstuart@users.noreply.github.com",
+		"url": "https://github.com/mstuart"
+	},
+	"type": "module",
+	"exports": {
+		"types": "./index.d.ts",
+		"default": "./index.js"
+	},
+	"sideEffects": false,
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"test": "xo && ava && tsd"
+	},
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"keywords": [
+		"iterable",
+		"iterator",
+		"lazy",
+		"generator",
+		"map",
+		"filter",
+		"take",
+		"chunk",
+		"zip",
+		"functional"
+	],
+	"devDependencies": {
+		"ava": "^6.0.0",
+		"tsd": "^0.31.0",
+		"xo": "^0.60.0"
+	}
+}

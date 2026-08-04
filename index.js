@@ -77,10 +77,12 @@ export function * flatten(iterable, depth = 1) {
 export function * unique(iterable) {
 	const seen = new Set();
 	for (const item of iterable) {
-		if (!seen.has(item)) {
-			seen.add(item);
-			yield item;
+		if (seen.has(item)) {
+			continue;
 		}
+
+		seen.add(item);
+		yield item;
 	}
 }
 

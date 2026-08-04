@@ -19,7 +19,7 @@ export function map<T, U>(iterable: Iterable<T>, function_: (item: T) => U): Gen
 Lazily filter items in an iterable.
 
 @param iterable - The input iterable.
-@param function_ - The predicate function.
+@param shouldInclude - The predicate function.
 @returns A generator yielding items that pass the predicate.
 
 @example
@@ -30,7 +30,7 @@ import {filter} from 'iterable-ops';
 //=> [2, 4]
 ```
 */
-export function filter<T>(iterable: Iterable<T>, function_: (item: T) => boolean): Generator<T>;
+export function filter<T>(iterable: Iterable<T>, shouldInclude: (item: T) => boolean): Generator<T>;
 
 /**
 Lazily take the first `count` items from an iterable.
@@ -70,7 +70,7 @@ export function drop<T>(iterable: Iterable<T>, count: number): Generator<T>;
 Lazily group items into arrays of `size`.
 
 @param iterable - The input iterable.
-@param size - The chunk size.
+@param size - The number of items per chunk.
 @returns A generator yielding arrays of items.
 
 @example

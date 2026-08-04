@@ -161,7 +161,7 @@ test('flatten with depth 2', t => {
 });
 
 test('flatten with depth Infinity', t => {
-	t.deepEqual([...flatten([[1, [2, [3, [4]]]]], Number.POSITIVE_INFINITY)], [1, 2, 3, 4]);
+	t.deepEqual([...flatten([[1, [2, [3, [4]]]]], Infinity)], [1, 2, 3, 4]);
 });
 
 test('flatten does not flatten strings', t => {

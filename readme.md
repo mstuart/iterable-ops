@@ -1,7 +1,16 @@
-# iterable-ops
+<div align="center">
+  <img src="docs/assets/logo.svg" alt="iterable-ops — Lazy utility functions for sync and async iterables — map, filter, take, chunk, zip, flatten" width="720">
+</div>
 
-> Lazy utility functions for sync and async iterables — map, filter, take, chunk, zip, flatten
+<p align="center"><strong>Lazy utility functions for sync and async iterables — map, filter, take, chunk, zip, flatten</strong></p>
 
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://www.npmjs.com/package/iterable-ops"><img src="https://img.shields.io/npm/v/iterable-ops?label=npm" alt="npm"></a>
+  <img src="https://img.shields.io/badge/node-%E2%89%A520-339933.svg" alt="Node 20+">
+</p>
+
+---
 ## Install
 
 ```sh

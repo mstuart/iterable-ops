@@ -13,7 +13,10 @@ import {map} from 'iterable-ops';
 //=> [2, 4, 6]
 ```
 */
-export function map<T, U>(iterable: Iterable<T>, function_: (item: T) => U): Generator<U>;
+export function map<T, U>(
+  iterable: Iterable<T>,
+  function_: (item: T) => U
+): Generator<U>;
 
 /**
 Lazily filter items in an iterable.
@@ -30,7 +33,10 @@ import {filter} from 'iterable-ops';
 //=> [2, 4]
 ```
 */
-export function filter<T>(iterable: Iterable<T>, shouldInclude: (item: T) => boolean): Generator<T>;
+export function filter<T>(
+  iterable: Iterable<T>,
+  shouldInclude: (item: T) => boolean
+): Generator<T>;
 
 /**
 Lazily take the first `count` items from an iterable.
@@ -97,7 +103,9 @@ import {zip} from 'iterable-ops';
 //=> [[1, 'a'], [2, 'b']]
 ```
 */
-export function zip<T extends Array<Iterable<unknown>>>(...iterables: T): Generator<unknown[]>;
+export function zip<T extends Iterable<unknown>[]>(
+  ...iterables: T
+): Generator<unknown[]>;
 
 /**
 Lazily flatten nested iterables up to the specified depth.
@@ -149,7 +157,10 @@ for await (const item of mapAsync(gen(), x => x * 2)) {
 }
 ```
 */
-export function mapAsync<T, U>(iterable: AsyncIterable<T>, function_: (item: T) => U): AsyncGenerator<U>;
+export function mapAsync<T, U>(
+  iterable: AsyncIterable<T>,
+  function_: (item: T) => U
+): AsyncGenerator<U>;
 
 /**
 Lazily filter items in an async iterable.
@@ -168,4 +179,7 @@ for await (const item of filterAsync(gen(), x => x > 1)) {
 }
 ```
 */
-export function filterAsync<T>(iterable: AsyncIterable<T>, function_: (item: T) => boolean | Promise<boolean>): AsyncGenerator<T>;
+export function filterAsync<T>(
+  iterable: AsyncIterable<T>,
+  function_: (item: T) => boolean | Promise<boolean>
+): AsyncGenerator<T>;

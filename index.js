@@ -13,14 +13,19 @@ export function* filter(iterable, function_) {
 }
 
 export function* take(iterable, count) {
+  if (count <= 0) {
+    return;
+  }
+
   let index = 0;
   for (const item of iterable) {
+    yield item;
+    index += 1;
+    // Stop as soon as we have enough, without pulling another element from
+    // the source — important for lazy, infinite, or side-effectful iterables.
     if (index >= count) {
       return;
     }
-
-    yield item;
-    index += 1;
   }
 }
 

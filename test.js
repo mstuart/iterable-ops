@@ -82,6 +82,19 @@ test("take with infinite generator", (t) => {
   t.deepEqual([...take(infiniteNumbers(), 5)], [0, 1, 2, 3, 4]);
 });
 
+test("take does not pull more items from the source than requested", (t) => {
+  let pulled = 0;
+  function* counted() {
+    for (let index = 0; ; index += 1) {
+      pulled += 1;
+      yield index;
+    }
+  }
+
+  t.deepEqual([...take(counted(), 3)], [0, 1, 2]);
+  t.is(pulled, 3);
+});
+
 test("take with empty iterable", (t) => {
   t.deepEqual([...take([], 3)], []);
 });

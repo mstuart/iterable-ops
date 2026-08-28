@@ -181,6 +181,49 @@ test("zip with empty iterable", (t) => {
   t.deepEqual([...zip([1, 2], [])], []);
 });
 
+test("zip closes longer iterators when the shortest is exhausted", (t) => {
+  let closed = false;
+  function* longer() {
+    try {
+      yield 1;
+      yield 2;
+    } finally {
+      closed = true;
+    }
+  }
+
+  t.deepEqual([...zip(longer(), [])], []);
+  t.true(closed);
+});
+
+test("zip does not close iterators that finished naturally", (t) => {
+  const iterator = [1][Symbol.iterator]();
+  iterator.return = () => {
+    throw new Error("already finished");
+  };
+  t.deepEqual([...zip({ [Symbol.iterator]: () => iterator })], [[1]]);
+});
+
+test("zip attempts to close every unfinished iterator", (t) => {
+  let secondClosed = false;
+  const first = [1, 2][Symbol.iterator]();
+  first.return = () => {
+    throw new Error("cleanup failed");
+  };
+  function* second() {
+    try {
+      yield 1;
+      yield 2;
+    } finally {
+      secondClosed = true;
+    }
+  }
+  const iterator = zip({ [Symbol.iterator]: () => first }, second());
+  iterator.next();
+  t.throws(() => iterator.return(), { message: "cleanup failed" });
+  t.true(secondClosed);
+});
+
 // --- flatten ---
 
 test("flatten one level", (t) => {

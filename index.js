@@ -57,9 +57,15 @@ export function* chunk(iterable, size) {
 
 export function* zip(...iterables) {
   const iterators = iterables.map((iterable) => iterable[Symbol.iterator]());
+  const done = iterators.map(() => false);
+  let iterationFailed = false;
   try {
     for (;;) {
-      const results = iterators.map((iterator) => iterator.next());
+      const results = iterators.map((iterator, index) => {
+        const result = iterator.next();
+        done[index] = result.done;
+        return result;
+      });
 
       if (results.some((result) => result.done)) {
         return;
@@ -67,10 +73,20 @@ export function* zip(...iterables) {
 
       yield results.map((result) => result.value);
     }
+  } catch (error) {
+    iterationFailed = true;
+    throw error;
   } finally {
-    for (const iterator of iterators) {
-      iterator.return?.();
+    let cleanupError;
+    for (const [index, iterator] of iterators.entries()) {
+      if (done[index]) continue;
+      try {
+        iterator.return?.();
+      } catch (error) {
+        cleanupError ??= error;
+      }
     }
+    if (cleanupError && !iterationFailed) throw cleanupError;
   }
 }
 

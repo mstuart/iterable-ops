@@ -55,6 +55,32 @@ export function* chunk(iterable, size) {
   }
 }
 
+// Close every iterator that has not finished on its own, then surface the
+// first error a `.return()` raised — unless the zip body itself already threw,
+// in which case that original error must win. Kept out of zip's `finally`
+// block on purpose: rethrowing directly inside `finally` triggers
+// noUnsafeFinally, and the propagation here is intentional and tested.
+function closeUnfinishedIterators(iterators, done, iterationFailed) {
+  let cleanupError;
+  let hasCleanupError = false;
+  for (const [index, iterator] of iterators.entries()) {
+    if (done[index]) {
+      continue;
+    }
+    try {
+      iterator.return?.();
+    } catch (error) {
+      if (!hasCleanupError) {
+        cleanupError = error;
+        hasCleanupError = true;
+      }
+    }
+  }
+  if (hasCleanupError && !iterationFailed) {
+    throw cleanupError;
+  }
+}
+
 export function* zip(...iterables) {
   const iterators = iterables.map((iterable) => iterable[Symbol.iterator]());
   const done = iterators.map(() => false);
@@ -77,16 +103,7 @@ export function* zip(...iterables) {
     iterationFailed = true;
     throw error;
   } finally {
-    let cleanupError;
-    for (const [index, iterator] of iterators.entries()) {
-      if (done[index]) continue;
-      try {
-        iterator.return?.();
-      } catch (error) {
-        cleanupError ??= error;
-      }
-    }
-    if (cleanupError && !iterationFailed) throw cleanupError;
+    closeUnfinishedIterators(iterators, done, iterationFailed);
   }
 }
 

@@ -57,15 +57,20 @@ export function* chunk(iterable, size) {
 
 export function* zip(...iterables) {
   const iterators = iterables.map((iterable) => iterable[Symbol.iterator]());
+  try {
+    for (;;) {
+      const results = iterators.map((iterator) => iterator.next());
 
-  for (;;) {
-    const results = iterators.map((iterator) => iterator.next());
+      if (results.some((result) => result.done)) {
+        return;
+      }
 
-    if (results.some((result) => result.done)) {
-      return;
+      yield results.map((result) => result.value);
     }
-
-    yield results.map((result) => result.value);
+  } finally {
+    for (const iterator of iterators) {
+      iterator.return?.();
+    }
   }
 }
 

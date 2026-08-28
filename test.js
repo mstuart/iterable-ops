@@ -181,6 +181,21 @@ test("zip with empty iterable", (t) => {
   t.deepEqual([...zip([1, 2], [])], []);
 });
 
+test("zip closes longer iterators when the shortest is exhausted", (t) => {
+  let closed = false;
+  function* longer() {
+    try {
+      yield 1;
+      yield 2;
+    } finally {
+      closed = true;
+    }
+  }
+
+  t.deepEqual([...zip(longer(), [])], []);
+  t.true(closed);
+});
+
 // --- flatten ---
 
 test("flatten one level", (t) => {

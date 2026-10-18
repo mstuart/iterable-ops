@@ -76,7 +76,7 @@ export function drop<T>(iterable: Iterable<T>, count: number): Generator<T>;
 Lazily group items into arrays of `size`.
 
 @param iterable - The input iterable.
-@param size - The number of items per chunk.
+@param size - A positive integer. Invalid sizes throw RangeError when iteration begins.
 @returns A generator yielding arrays of items.
 
 @example

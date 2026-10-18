@@ -41,6 +41,10 @@ export function* drop(iterable, count) {
 }
 
 export function* chunk(iterable, size) {
+  if (!Number.isInteger(size) || size <= 0) {
+    throw new RangeError("Expected size to be a positive integer");
+  }
+
   let current = [];
   for (const item of iterable) {
     current.push(item);
@@ -82,10 +86,19 @@ function closeUnfinishedIterators(iterators, done, iterationFailed) {
 }
 
 export function* zip(...iterables) {
-  const iterators = iterables.map((iterable) => iterable[Symbol.iterator]());
-  const done = iterators.map(() => false);
+  const iterators = [];
+  const done = [];
   let iterationFailed = false;
   try {
+    for (const iterable of iterables) {
+      iterators.push(iterable[Symbol.iterator]());
+      done.push(false);
+    }
+
+    if (iterators.length === 0) {
+      return;
+    }
+
     for (;;) {
       const results = iterators.map((iterator, index) => {
         const result = iterator.next();

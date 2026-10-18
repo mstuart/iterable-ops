@@ -69,11 +69,11 @@ Skips the first `count` items, then yields the rest.
 
 ### chunk(iterable, size)
 
-Yields arrays of `size` items. The last chunk may be smaller.
+Yields arrays of `size` items. The last chunk may be smaller. The size must be a positive integer; invalid sizes throw `RangeError` when iteration begins.
 
 ### zip(...iterables)
 
-Yields arrays of parallel items from each iterable. Stops at the shortest.
+Yields arrays of parallel items from each iterable. Stops at the shortest, or immediately when no inputs are provided. Acquired iterators are closed if a later input fails to provide an iterator.
 
 ### flatten(iterable, depth?)
 

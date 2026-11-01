@@ -38,3 +38,8 @@ expectType<AsyncGenerator<number>>(filterAsync(generate(), (x) => x > 1));
 
 expectError(map(123, (x) => x));
 expectError(filter(123, (x) => x));
+
+// Async generators await mapped promises before yielding values.
+expectType<AsyncGenerator<number>>(
+  mapAsync(generate(), async (value) => value + 1)
+);

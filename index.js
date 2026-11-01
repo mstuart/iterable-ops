@@ -100,16 +100,15 @@ export function* zip(...iterables) {
     }
 
     for (;;) {
-      const results = iterators.map((iterator, index) => {
+      const results = [];
+      for (const [index, iterator] of iterators.entries()) {
         const result = iterator.next();
-        // Read `done` exactly once — a custom result object could expose it as
-        // an accessor that throws or changes value on a second read.
+        // Read done once and stop without pulling later inputs.
         done[index] = Boolean(result.done);
-        return result;
-      });
-
-      if (done.some((isDone) => isDone)) {
-        return;
+        if (done[index]) {
+          return;
+        }
+        results.push(result);
       }
 
       yield results.map((result) => result.value);

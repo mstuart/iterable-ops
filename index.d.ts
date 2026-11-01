@@ -160,7 +160,7 @@ for await (const item of mapAsync(gen(), x => x * 2)) {
 export function mapAsync<T, U>(
   iterable: AsyncIterable<T>,
   function_: (item: T) => U
-): AsyncGenerator<U>;
+): AsyncGenerator<Awaited<U>>;
 
 /**
 Lazily filter items in an async iterable.

@@ -105,7 +105,7 @@ import {zip} from 'iterable-ops';
 */
 export function zip<T extends Iterable<unknown>[]>(
   ...iterables: T
-): Generator<unknown[]>;
+): Generator<{ [K in keyof T]: T[K] extends Iterable<infer V> ? V : never }>;
 
 /**
 Lazily flatten nested iterables up to the specified depth.
@@ -141,9 +141,9 @@ import {unique} from 'iterable-ops';
 export function unique<T>(iterable: Iterable<T>): Generator<T>;
 
 /**
-Lazily transform each item in an async iterable.
+Lazily transform each item in an iterable or async iterable.
 
-@param iterable - The input async iterable.
+@param iterable - The input iterable or async iterable.
 @param function_ - The mapping function.
 @returns An async generator yielding transformed items.
 
@@ -161,11 +161,15 @@ export function mapAsync<T, U>(
   iterable: AsyncIterable<T>,
   function_: (item: T) => U
 ): AsyncGenerator<Awaited<U>>;
+export function mapAsync<T, U>(
+  iterable: Iterable<T>,
+  function_: (item: Awaited<T>) => U
+): AsyncGenerator<Awaited<U>>;
 
 /**
-Lazily filter items in an async iterable.
+Lazily filter items in an iterable or async iterable.
 
-@param iterable - The input async iterable.
+@param iterable - The input iterable or async iterable.
 @param function_ - The predicate function.
 @returns An async generator yielding items that pass the predicate.
 
@@ -181,5 +185,9 @@ for await (const item of filterAsync(gen(), x => x > 1)) {
 */
 export function filterAsync<T>(
   iterable: AsyncIterable<T>,
-  function_: (item: T) => boolean | Promise<boolean>
+  function_: (item: T) => boolean | PromiseLike<boolean>
 ): AsyncGenerator<T>;
+export function filterAsync<T>(
+  iterable: Iterable<T>,
+  function_: (item: Awaited<T>) => boolean | PromiseLike<boolean>
+): AsyncGenerator<Awaited<T>>;

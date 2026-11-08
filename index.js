@@ -108,10 +108,10 @@ export function* zip(...iterables) {
         if (done[index]) {
           return;
         }
-        results.push(result);
+        results.push(result.value);
       }
 
-      yield results.map((result) => result.value);
+      yield results;
     }
   } catch (error) {
     iterationFailed = true;
